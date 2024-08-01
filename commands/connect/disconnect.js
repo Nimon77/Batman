@@ -26,12 +26,9 @@ module.exports = {
       return interaction.reply('Disconnected from ' + server.name);
     }
     for (let i = 0; i < bots.length; i++) {
-      if (bots[i]) {
-        bots[i].quit();
-        bots.splice(i, 1);
-        await wait(1000);
-      }
+      bots[i].quit();
     }
+    bots = [];
     return interaction.reply('Disconnected from all servers');
   },
   async autocomplete(interaction) {
@@ -39,7 +36,6 @@ module.exports = {
       name: server.name,
       value: server.name,
     }));
-    console.log(results);
     return interaction.respond(results);
   },
 };

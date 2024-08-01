@@ -221,7 +221,6 @@ module.exports = {
       name: server.name,
       value: server.name,
     }));
-    console.log(results);
     return interaction.respond(results);
   },
 };

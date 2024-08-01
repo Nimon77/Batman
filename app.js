@@ -1,14 +1,14 @@
 /* global bots:writable config:readable */
 require('./utils/instrument')
+const Sentry = require("@sentry/node");
 const { Client, Collection, GatewayIntentBits, Events, REST, Routes } = require('discord.js');
-// const mineflayer = require('mineflayer')
 const path = require('path')
 const fs = require('fs')
 const YAML = require('yaml')
 
 config = YAML.parse(fs.readFileSync('./config.yml', 'utf8'))
 
-console.log('config :>> ', config);
+// console.log('config :>> ', config);
 
 bots = []
 
