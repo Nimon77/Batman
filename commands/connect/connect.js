@@ -212,7 +212,7 @@ module.exports = {
     }
     interaction.reply('Connecting to the server...');
     for (let i = 0; i < config.servers.length; i++) {
-      bots[i] = connectBot(bot, interaction);
+      bots[i] = connectBot(config.servers[i], interaction);
       await wait(5000);
     }
   },
