@@ -1,0 +1,19 @@
+servers:
+  - name: 'tata'
+    host: 'play.tata.fr'
+    port: 25567
+    username: 'BatmanTATA'
+    password: 'VERY_GOOD_MDP'
+    discord_channel_id: 'DISCORD_CHANNEL_LOG_ID'
+
+  - name: 'toto'
+    host: 'play.toto.fr'
+    port: 25565
+    username: 'BatmanTOTO'
+    password: 'VERY_GOOD_MDP'
+    discord_channel_id: 'DISCORD_CHANNEL_LOG_ID'
+
+discord:
+  client_id: 'DISCORD_APP_ID'
+  token: 'DISCORD_BOT_TOKEN'
+  guild_id: 'DISCORD_GUILD_ID'

@@ -1,0 +1,14 @@
+services:
+  batman:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SENTRY_DSN=SENTRY_DSN
+    configs:
+      - source: config.yml
+        target: /usr/src/app/config.yml
+
+configs:
+  config.yml:
+    file: ./config.yml
