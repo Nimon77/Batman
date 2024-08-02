@@ -106,6 +106,8 @@ async function connectBot(server, interaction) {
     version: server.version || '1.18.2',
   });
 
+  bot.start_username = server.username;
+
   bot.ready = false;
 
   bot.on('kicked', (reason) => {
@@ -180,6 +182,18 @@ async function connectBot(server, interaction) {
     bot.ready = true;
   });
 
+  bot.on('chat:bot_console_tp', async function() {
+    bot.removeChatPattern('bot_need_register');
+    bot.removeChatPattern('bot_need_login');
+    bot.removeChatPattern('bot_connection_success');
+    await bot.waitForChunksToLoad();
+    await bot.waitForTicks(100);
+    await bot.chat('/login' + server.password);
+    await bot.waitForTicks(200);
+    await bot.clickWindow(22, 0, 0);
+    bot.ready = true;
+  });
+
   bot.once('spawn', () => {
     bot.addChatPattern(
         'bot_need_register',
@@ -192,6 +206,10 @@ async function connectBot(server, interaction) {
     bot.addChatPattern(
         'bot_connection_success',
         /» La connexion a été effectuée avec succès !/,
+    );
+    bot.addChatPattern(
+      'bot_console_tp',
+      /Console vous a téléporté à spawn./,
     );
   });
 
@@ -227,6 +245,9 @@ module.exports = {
     }
     interaction.reply('Connecting to the server...');
     for (let i = 0; i < config.servers.length; i++) {
+      if (bots.find((bot) => bot.start_username === config.servers[i].username)) {
+        continue;
+      }
       bots.push(await connectBot(config.servers[i], interaction));
     }
   },
