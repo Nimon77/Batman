@@ -1,7 +1,7 @@
 /* global bots:writable config:readable */
 require('../../utils/instrument')
 const Sentry = require("@sentry/node");
-const {SlashCommandBuilder, ActivityType} = require('discord.js');
+const {SlashCommandBuilder} = require('discord.js');
 const mineflayer = require('mineflayer');
 const wait = require('node:timers/promises').setTimeout;
 
@@ -178,7 +178,6 @@ function connectBot(server, interaction) {
   });
 
   bot.once('spawn', () => {
-    // mineflayerViewer(bot, { port: 3007, firstPerson: true });
     bot.addChatPattern(
         'bot_need_register',
         /» Inscrivez-vous sur le serveur avec la commande: \/register motdepasse motdepasse/,
@@ -192,6 +191,10 @@ function connectBot(server, interaction) {
         /» La connexion a été effectuée avec succès !/,
     );
   });
+
+  while (bot.chatPatterns.find((pattern) => pattern.pattern == /» La connexion a été effectuée avec succès !/)) {
+    wait(1000);
+  }
 
   return bot;
 }
