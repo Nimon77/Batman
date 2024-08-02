@@ -132,7 +132,7 @@ function connectBot(server, interaction) {
     chatChannel.send('❌ Bot disconnected');
     bots.splice(bots.indexOf(bot), 1);
   });
-  client.on('error', (error) => {
+  bot.on('error', (error) => {
     Sentry.captureException(error, {extra: {server}});
     log(server, 'Error: ' + error);
   });
