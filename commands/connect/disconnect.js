@@ -24,12 +24,13 @@ module.exports = {
       bot.quit();
       return interaction.reply('Disconnected from ' + server.name);
     }
+    interaction.deferReply();
     while (bots.length > 0) {
       bots[0].quit();
       await wait(1000);
     }
     bots = [];
-    return interaction.reply('Disconnected from all servers');
+    return interaction.followUp('Disconnected from all servers');
   },
   async autocomplete(interaction) {
     const results = config.servers.slice(0, 25).map((server) => ({

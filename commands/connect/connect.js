@@ -4,6 +4,10 @@ const {SlashCommandBuilder, ActivityType} = require('discord.js');
 const mineflayer = require('mineflayer');
 const wait = require('node:timers/promises').setTimeout;
 
+function log(server, message) {
+  console.log(`[${server.name}] ${message}`);
+}
+
 function convertAnsi4ToAnsi3(message) {
   // Remove ANSI reset code
   message = message.replace(/^\u001b\[0m/, '');
@@ -91,7 +95,7 @@ function connectBot(server, interaction) {
     (channel) => channel.id === server.discord_channel_id,
   );
 
-  console.log(server.name);
+  log(server, 'Connecting...');
   chatChannel.send('Connecting to ' + server.name + '...');
 
   bot = mineflayer.createBot({
@@ -102,7 +106,7 @@ function connectBot(server, interaction) {
   });
 
   bot.on('kicked', (reason) => {
-    console.log('Kicked:', reason);
+    log(server, 'Kicked: ' + reason);
     reason = JSON.parse(reason);
     let message = reason.text;
     if (reason.extra) {
@@ -123,7 +127,7 @@ function connectBot(server, interaction) {
     bots.splice(bots.indexOf(bot), 1);
   });
   bot.on('end', () => {
-    console.log('Bot disconnected');
+    log(server, '❌ Disconnected');
     chatChannel.send('❌ Bot disconnected');
     bots.splice(bots.indexOf(bot), 1);
   });
@@ -133,7 +137,7 @@ function connectBot(server, interaction) {
 
   bot.on('message', (message) => {
     if (message.toString().includes('❤')) return;
-    console.log(message.toAnsi());
+    log(server, message.toAnsi());
     clearTimeout(msgTimer);
     msg += convertToAnsi3(message.toAnsi()) + '\n';
     // only send if no message in 5 seconds
@@ -175,13 +179,11 @@ function connectBot(server, interaction) {
 
   bot.on('chat:bot_connection_success', async function() {
     await bot.waitForChunksToLoad();
-    await bot.waitForTicks(200);
+    await bot.waitForTicks(300);
     await bot.clickWindow(22, 0, 0);
     bot.removeChatPattern('bot_need_register');
     bot.removeChatPattern('bot_need_login');
     bot.removeChatPattern('bot_connection_success');
-    await bot.waitForTicks(100);
-    await bot.waitForChunksToLoad();
   });
 
   return bot;
