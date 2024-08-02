@@ -25,9 +25,8 @@ module.exports = {
       return interaction.reply('Disconnected from ' + server.name);
     }
     interaction.deferReply();
-    while (bots.length > 0) {
-      bots[0].quit();
-      await wait(1000);
+    for (const bot of bots) {
+      bot.quit();
     }
     bots = [];
     return interaction.followUp('Disconnected from all servers');
