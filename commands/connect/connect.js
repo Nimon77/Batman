@@ -91,7 +91,7 @@ function convertToAnsi3(inputString) {
   return outputString;
 }
 
-function connectBot(server, interaction) {
+async function connectBot(server, interaction) {
   const chatChannel = interaction.guild.channels.cache.find(
     (channel) => channel.id === server.discord_channel_id,
   );
@@ -105,6 +105,8 @@ function connectBot(server, interaction) {
     username: server.username,
     version: server.version || '1.18.2',
   });
+
+  bot.ready = false;
 
   bot.on('kicked', (reason) => {
     log(server, 'Kicked: ' + reason);
@@ -175,6 +177,7 @@ function connectBot(server, interaction) {
     bot.removeChatPattern('bot_need_register');
     bot.removeChatPattern('bot_need_login');
     bot.removeChatPattern('bot_connection_success');
+    bot.ready = true;
   });
 
   bot.once('spawn', () => {
@@ -192,8 +195,8 @@ function connectBot(server, interaction) {
     );
   });
 
-  while (bot.chatPatterns.find((pattern) => pattern.pattern == /» La connexion a été effectuée avec succès !/)) {
-    wait(1000);
+  while (!bot.ready) {
+    await wait(1000);
   }
 
   return bot;
@@ -224,8 +227,7 @@ module.exports = {
     }
     interaction.reply('Connecting to the server...');
     for (let i = 0; i < config.servers.length; i++) {
-      bots.push(connectBot(config.servers[i], interaction));
-      await wait(5000);
+      bots.push(await connectBot(config.servers[i], interaction));
     }
   },
   async autocomplete(interaction) {
