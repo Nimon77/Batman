@@ -22,7 +22,6 @@ module.exports = {
         return interaction.reply('You are not connected to this server');
       }
       bot.quit();
-      bots.splice(bots.indexOf(bot), 1);
       return interaction.reply('Disconnected from ' + server.name);
     }
     while (bots.length > 0) {
