@@ -175,13 +175,13 @@ function connectBot(server, interaction) {
 
   bot.on('chat:bot_connection_success', async function() {
     await bot.waitForChunksToLoad();
-    await bot.waitForTicks(100);
+    await bot.waitForTicks(200);
     await bot.clickWindow(22, 0, 0);
     bot.removeChatPattern('bot_need_register');
     bot.removeChatPattern('bot_need_login');
     bot.removeChatPattern('bot_connection_success');
-    await bot.waitForChunksToLoad();
     await bot.waitForTicks(100);
+    await bot.waitForChunksToLoad();
   });
 
   return bot;

@@ -25,8 +25,9 @@ module.exports = {
       bots.splice(bots.indexOf(bot), 1);
       return interaction.reply('Disconnected from ' + server.name);
     }
-    for (let i = 0; i < bots.length; i++) {
-      bots[i].quit();
+    while (bots.length > 0) {
+      bots[0].quit();
+      await wait(1000);
     }
     bots = [];
     return interaction.reply('Disconnected from all servers');
