@@ -1,5 +1,6 @@
 /* global bots:writable config:readable */
 require('../../utils/instrument')
+const Sentry = require("@sentry/node");
 const {SlashCommandBuilder, ActivityType} = require('discord.js');
 const mineflayer = require('mineflayer');
 const wait = require('node:timers/promises').setTimeout;
@@ -131,6 +132,10 @@ function connectBot(server, interaction) {
     chatChannel.send('❌ Bot disconnected');
     bots.splice(bots.indexOf(bot), 1);
   });
+  client.on('error', (error) => {
+    Sentry.captureException(error, {extra: {server}});
+    log(server, 'Error: ' + error);
+  });
 
   let msg = '';
   let msgTimer;
@@ -151,6 +156,27 @@ function connectBot(server, interaction) {
     }, 10000);
   });
 
+  bot.on('chat:bot_need_register', async function() {
+    await bot.waitForChunksToLoad();
+    await bot.waitForTicks(100);
+    await bot.chat('/register ' + server.password + ' ' + server.password);
+  });
+
+  bot.on('chat:bot_need_login', async function() {
+    await bot.waitForChunksToLoad();
+    await bot.waitForTicks(100);
+    await bot.chat('/login ' + server.password);
+  });
+
+  bot.on('chat:bot_connection_success', async function() {
+    await bot.waitForChunksToLoad();
+    await bot.waitForTicks(200);
+    await bot.clickWindow(22, 0, 0);
+    bot.removeChatPattern('bot_need_register');
+    bot.removeChatPattern('bot_need_login');
+    bot.removeChatPattern('bot_connection_success');
+  });
+
   bot.once('spawn', () => {
     // mineflayerViewer(bot, { port: 3007, firstPerson: true });
     bot.addChatPattern(
@@ -165,25 +191,6 @@ function connectBot(server, interaction) {
         'bot_connection_success',
         /» La connexion a été effectuée avec succès !/,
     );
-  });
-
-  bot.on('chat:bot_need_register', async function() {
-    await bot.waitForChunksToLoad();
-    await bot.chat('/register ' + server.password + ' ' + server.password);
-  });
-
-  bot.on('chat:bot_need_login', async function() {
-    await bot.waitForChunksToLoad();
-    await bot.chat('/login ' + server.password);
-  });
-
-  bot.on('chat:bot_connection_success', async function() {
-    await bot.waitForChunksToLoad();
-    await bot.waitForTicks(300);
-    await bot.clickWindow(22, 0, 0);
-    bot.removeChatPattern('bot_need_register');
-    bot.removeChatPattern('bot_need_login');
-    bot.removeChatPattern('bot_connection_success');
   });
 
   return bot;
@@ -214,7 +221,7 @@ module.exports = {
     }
     interaction.reply('Connecting to the server...');
     for (let i = 0; i < config.servers.length; i++) {
-      bots[i] = connectBot(config.servers[i], interaction);
+      bots.push(connectBot(config.servers[i], interaction));
       await wait(5000);
     }
   },
