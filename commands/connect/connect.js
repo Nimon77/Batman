@@ -91,7 +91,7 @@ function convertToAnsi3(inputString) {
   return outputString;
 }
 
-async function connectBot(server, interaction) {
+function connectBot(server, interaction) {
   const chatChannel = interaction.guild.channels.cache.find(
     (channel) => channel.id === server.discord_channel_id,
   );
@@ -99,14 +99,12 @@ async function connectBot(server, interaction) {
   log(server, 'Connecting...');
   chatChannel.send('Connecting to ' + server.name + '...');
 
-  bot = mineflayer.createBot({
+  const bot = mineflayer.createBot({
     host: server.host,
     port: server.port,
     username: server.username,
     version: server.version || '1.18.2',
   });
-
-  bot.start_username = server.username;
 
   bot.ready = false;
 
@@ -129,12 +127,11 @@ async function connectBot(server, interaction) {
         `❌ Kicked : \`\`\`${message}\`\`\``,
     );
     bot.end();
-    bots.splice(bots.indexOf(bot), 1);
   });
   bot.on('end', () => {
     log(server, '❌ Disconnected');
     chatChannel.send('❌ Bot disconnected');
-    bots.splice(bots.indexOf(bot), 1);
+    bots.splice(bots.findIndex((b) => b.username === bot.username), 1);
   });
   bot.on('error', (error) => {
     Sentry.captureException(error, {extra: {server}});
@@ -179,19 +176,23 @@ async function connectBot(server, interaction) {
     bot.removeChatPattern('bot_need_register');
     bot.removeChatPattern('bot_need_login');
     bot.removeChatPattern('bot_connection_success');
+    bot.addChatPattern(
+      'bot_console_tp',
+      /Console vous a téléporté à spawn./,
+    );
     bot.ready = true;
   });
 
   bot.on('chat:bot_console_tp', async function() {
-    bot.removeChatPattern('bot_need_register');
-    bot.removeChatPattern('bot_need_login');
-    bot.removeChatPattern('bot_connection_success');
-    await bot.waitForChunksToLoad();
-    await bot.waitForTicks(100);
-    await bot.chat('/login' + server.password);
-    await bot.waitForTicks(200);
-    await bot.clickWindow(22, 0, 0);
-    bot.ready = true;
+    bot.removeChatPattern('bot_console_tp');
+    bot.addChatPattern(
+        'bot_need_login',
+        /» Connectez-vous à l'aide de la commande \/login Motdepasse/,
+    );
+    bot.addChatPattern(
+        'bot_connection_success',
+        /» La connexion a été effectuée avec succès !/,
+    );
   });
 
   bot.once('spawn', () => {
@@ -207,15 +208,11 @@ async function connectBot(server, interaction) {
         'bot_connection_success',
         /» La connexion a été effectuée avec succès !/,
     );
-    bot.addChatPattern(
-      'bot_console_tp',
-      /Console vous a téléporté à spawn./,
-    );
   });
 
-  while (!bot.ready) {
-    await wait(1000);
-  }
+  // while (!bot.ready) {
+  //   await wait(1000);
+  // }
 
   return bot;
 }
@@ -243,13 +240,16 @@ module.exports = {
       bots.push(connectBot(server, interaction));
       return interaction.reply('Connecting to ' + server.name);
     }
-    interaction.reply('Connecting to the server...');
+    await interaction.deferReply('Connecting to the server...');
     for (let i = 0; i < config.servers.length; i++) {
-      if (bots.find((bot) => bot.start_username === config.servers[i].username)) {
+      if (bots.find((bot) => bot.username === config.servers[i].username)) {
+        await interaction.followUp('Bot is already connected to ' + config.servers[i].name);
         continue;
       }
-      bots.push(await connectBot(config.servers[i], interaction));
+      bots.push(connectBot(config.servers[i], interaction));
+      await wait(5000);
     }
+    return interaction.followUp('Connected to all servers');
   },
   async autocomplete(interaction) {
     const results = config.servers.slice(0, 25).map((server) => ({

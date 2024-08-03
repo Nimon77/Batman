@@ -10,7 +10,7 @@ config = YAML.parse(fs.readFileSync('./config.yml', 'utf8'))
 
 // console.log('config :>> ', config);
 
-bots = []
+bots = [];
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],

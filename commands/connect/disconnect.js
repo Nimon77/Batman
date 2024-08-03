@@ -17,21 +17,18 @@ module.exports = {
       if (!server) {
         return interaction.reply('Server not found');
       }
-      const bot = bots.find((bot) => bot.start_username === server.username);
+      const bot = bots.find((bot) => bot.username === server.username);
       if (!bot) {
         return interaction.reply('You are not connected to this server');
       }
       bot.quit();
       return interaction.reply('Disconnected from ' + server.name);
     }
-    interaction.deferReply();
-    tmp = bots;
-    while (tmp.length > 0) {
-      tmp[0].quit();
-      tmp.shift();
+    await interaction.deferReply();
+    while (bots.length > 0) {
+      bots[0].quit();
       await wait(1000);
     }
-    bots = [];
     return interaction.followUp('Disconnected from all servers');
   },
   async autocomplete(interaction) {
