@@ -232,7 +232,7 @@ module.exports = {
       if (!server) {
         return interaction.reply('Server not found');
       }
-      const bot = bots.find((bot) => bot.username === interaction.user.username);
+      const bot = bots.find((bot) => bot.username === server.username);
       if (bot) {
         return interaction.reply('You are already connected to a server');
       }
