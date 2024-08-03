@@ -55,6 +55,7 @@ const rest = new REST().setToken(config.discord.token);
   } catch (error) {
     // And of course, make sure you catch and log any errors!
     console.error(error);
+    Sentry.captureException(error);
   }
 })();
 
@@ -77,14 +78,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
   } else if (interaction.isCommand()) {
     try {
-      // if (connected && command.data.name === 'connect') {
-      //   await interaction.reply('The bot is already connected to the server.');
-      //   return;
-      // }
-      // if (!connected && command.data.name !== 'connect') {
-      //   await interaction.reply({content: 'The bot is not connected to the server.', ephemeral: true});
-      //   return;
-      // }
       await command.execute(interaction);
     } catch (error) {
       Sentry.captureException(error, {extra: {interaction}});

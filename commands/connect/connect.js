@@ -106,7 +106,7 @@ function connectBot(server, interaction) {
     version: server.version || '1.18.2',
   });
 
-  bot.ready = false;
+  // bot.ready = false;
 
   bot.on('kicked', (reason) => {
     log(server, 'Kicked: ' + reason);
@@ -142,7 +142,7 @@ function connectBot(server, interaction) {
   let msgTimer;
 
   bot.on('message', (message) => {
-    if (message.toString().includes('❤')) return;
+    if (message.toString().includes('❤❤❤❤❤')) return;
     log(server, message.toAnsi());
     clearTimeout(msgTimer);
     msg += convertToAnsi3(message.toAnsi()) + '\n';
@@ -180,7 +180,7 @@ function connectBot(server, interaction) {
       'bot_console_tp',
       /Console vous a téléporté à spawn./,
     );
-    bot.ready = true;
+    // bot.ready = true;
   });
 
   bot.on('chat:bot_console_tp', async function() {
