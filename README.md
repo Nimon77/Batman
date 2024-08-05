@@ -64,6 +64,7 @@ Before running the project, ensure you have the following installed:
 
 - **/connect [server]**: Connect to a specified Minecraft server or all configured servers.
 - **/disconnect [server]**: Disconnect from a specified server or all servers if no server is specified.
+- **/say [server] [message]**: Send the specified message to the specifier minecraft server
 
 ### Error Monitoring
 
