@@ -91,6 +91,20 @@ function convertToAnsi3(inputString) {
   return outputString;
 }
 
+function blacklistedMessage(message) {
+  const blacklist = [
+    '❤❤❤❤❤',
+    'vient de voter pour le seveur',
+    'Le site de vote Vote',
+  ];
+  for (let i = 0; i < blacklist.length; i++) {
+    if (message.includes(blacklist[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function connectBot(server, interaction) {
   const chatChannel = interaction.guild.channels.cache.find(
     (channel) => channel.id === server.discord_channel_id,
@@ -142,7 +156,7 @@ function connectBot(server, interaction) {
   let msgTimer;
 
   bot.on('message', (message) => {
-    if (message.toString().includes('❤❤❤❤❤')) return;
+    if (blacklistedMessage(message.toString())) return;
     log(server, message.toAnsi());
     clearTimeout(msgTimer);
     msg += convertToAnsi3(message.toAnsi()) + '\n';
