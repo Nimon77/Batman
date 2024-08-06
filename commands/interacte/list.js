@@ -1,5 +1,5 @@
 /* global bots:readable config:readable */
-const {SlashCommandBuilder, MessageEmbed} = require('discord.js');
+const {SlashCommandBuilder, EmbedBuilder} = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,12 +14,12 @@ module.exports = {
         if (interaction.options.getString('server') === 'all') {
             // max 25 fields per embed
             const embeds = [];
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
                 .setTitle('Players on all servers');
             bots.forEach((bot) => {
                 if (embed.fields.length >= 25) {
                     embeds.push(embed);
-                    embed = new MessageEmbed();
+                    embed = new EmbedBuilder();
                 }
                 embed.addField(bot.username, bot.players.join('\n') || 'No players');
             });
@@ -34,7 +34,7 @@ module.exports = {
             return interaction.reply('You are not connected to this server');
         }
         const embeds = [];
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setTitle('Players on ' + server.name);
         if (bot.players.length === 0) {
             embed.addField('No players', 'No players');
@@ -42,7 +42,7 @@ module.exports = {
         bot.players.forEach((player) => {
             if (embed.fields.length >= 25) {
                 embeds.push(embed);
-                embed = new MessageEmbed();
+                embed = new EmbedBuilder();
             }
             embed.addField(player, player);
         });
