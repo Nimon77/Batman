@@ -16,7 +16,6 @@ module.exports = {
             bot.chat('/tps');
         });
         await wait(5000);
-        tps.sort((a, b) => b[1] - a[1]);
         tps.forEach((tp) => {
             tp[0] = config.servers.find((server) => server.username === tp[0]).name;
         });
