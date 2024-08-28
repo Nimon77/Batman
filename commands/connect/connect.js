@@ -1,9 +1,10 @@
-/* global bots:writable config:readable */
+/* global bots:writable job:writable config:readable */
 require('../../utils/instrument')
 const Sentry = require("@sentry/node");
 const {SlashCommandBuilder} = require('discord.js');
 const mineflayer = require('mineflayer');
 const wait = require('node:timers/promises').setTimeout;
+import { CronJob } from 'cron';
 
 function log(server, message) {
   console.log(`[${server.name}] ${message}`);
@@ -255,14 +256,14 @@ module.exports = {
       return interaction.reply('Connecting to ' + server.name);
     }
     await interaction.deferReply('Connecting to the server...');
-    for (let i = 0; i < config.servers.length; i++) {
-      if (bots.find((bot) => bot.username === config.servers[i].username)) {
-        await interaction.followUp('Bot is already connected to ' + config.servers[i].name);
-        continue;
+    job = new CronJob(config.reconnect_cron, async function() {
+      for (let i = 0; i < config.servers.length; i++) {
+        if (bots.find((bot) => bot.username === config.servers[i].username))
+          continue;
+        bots.push(connectBot(config.servers[i], interaction));
+        await wait(5000);
       }
-      bots.push(connectBot(config.servers[i], interaction));
-      await wait(5000);
-    }
+    }, null, true, 'Europe/Paris', null, true);
     return interaction.followUp('Connected to all servers');
   },
   async autocomplete(interaction) {

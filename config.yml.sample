@@ -17,3 +17,5 @@ discord:
   client_id: 'DISCORD_APP_ID'
   token: 'DISCORD_BOT_TOKEN'
   guild_id: 'DISCORD_GUILD_ID'
+
+reconnect_cron: '15 6 * * *'

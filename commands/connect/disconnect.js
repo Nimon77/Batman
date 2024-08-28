@@ -1,4 +1,4 @@
-/* global bots:writable */
+/* global bots:writable job:writable */
 const {SlashCommandBuilder} = require('discord.js');
 const wait = require('node:timers/promises').setTimeout;
 
@@ -29,6 +29,7 @@ module.exports = {
       bots[0].quit();
       await wait(1000);
     }
+    job.stop();
     return interaction.followUp('Disconnected from all servers');
   },
   async autocomplete(interaction) {

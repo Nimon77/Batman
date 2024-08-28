@@ -1,4 +1,4 @@
-/* global bots:writable config:readable */
+/* global bots:writable job:writable config:readable */
 require('./utils/instrument')
 const Sentry = require("@sentry/node");
 const { Client, Collection, GatewayIntentBits, Events, REST, Routes } = require('discord.js');
@@ -11,6 +11,7 @@ config = YAML.parse(fs.readFileSync('./config.yml', 'utf8'))
 // console.log('config :>> ', config);
 
 bots = [];
+job = null;
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
