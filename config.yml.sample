@@ -4,6 +4,7 @@ servers:
     port: 25567
     username: 'BatmanTATA'
     password: 'VERY_GOOD_MDP'
+    block_slot: 22
     discord_channel_id: 'DISCORD_CHANNEL_LOG_ID'
 
   - name: 'toto'
@@ -11,6 +12,7 @@ servers:
     port: 25565
     username: 'BatmanTOTO'
     password: 'VERY_GOOD_MDP'
+    block_slot: 22
     discord_channel_id: 'DISCORD_CHANNEL_LOG_ID'
 
 discord:
