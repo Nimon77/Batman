@@ -4,7 +4,7 @@ const Sentry = require("@sentry/node");
 const {SlashCommandBuilder} = require('discord.js');
 const mineflayer = require('mineflayer');
 const wait = require('node:timers/promises').setTimeout;
-import { CronJob } from 'cron';
+const {CronJob} = require('cron');
 
 function log(server, message) {
   console.log(`[${server.name}] ${message}`);
