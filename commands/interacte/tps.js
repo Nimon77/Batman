@@ -15,11 +15,12 @@ module.exports = {
             });
             bot.chat('/tps');
         });
-        await wait(5000);
-        tps_list.sort((a, b) => b[1] - a[1]);
+        await wait(1500);
         tps_list.forEach((tps) => {
             tps[0] = config.servers.find((server) => server.username === tps[0]).name;
         });
+        tps_list = tps_list.map((tps) => [tps[0], tps[1].replace(/([0-9.]+)%/, '`$1%`')]);
+        tps_list.sort((a, b) => a[0].localeCompare(b[0]));
         return interaction.followUp(tps_list.map((tps) => `- \`${tps[0]}\`: ${tps[1]}`).join('\n'));
     },
 };
