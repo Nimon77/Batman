@@ -19,5 +19,8 @@ discord:
   client_id: 'DISCORD_APP_ID'
   token: 'DISCORD_BOT_TOKEN'
   guild_id: 'DISCORD_GUILD_ID'
+  messages_blacklist:
+    - 'tata'
+    - 'toto'
 
 reconnect_cron: '15 6 * * *'

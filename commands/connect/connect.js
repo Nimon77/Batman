@@ -93,13 +93,8 @@ function convertToAnsi3(inputString) {
 }
 
 function blacklistedMessage(message) {
-  const blacklist = [
-    '❤❤❤❤❤',
-    'vient de voter pour le seveur',
-    'Le site de vote Vote',
-  ];
-  for (let i = 0; i < blacklist.length; i++) {
-    if (message.includes(blacklist[i])) {
+  for (let i = 0; i < config.discord.messages_blacklist.length; i++) {
+    if (message.includes(config.discord.messages_blacklist[i])) {
       return true;
     }
   }
