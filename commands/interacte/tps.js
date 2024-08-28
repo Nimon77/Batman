@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Get the TPS of the Minecraft server.'),
     async execute(interaction) {
         await interaction.deferReply();
-        tps_list = [];
+        var tps_list = [];
         bots.forEach((bot) => {
             bot.once('chat:tps', (tps) => {
                 tps_list.push([bot.username, tps]);
@@ -20,6 +20,6 @@ module.exports = {
         tps_list.forEach((tps) => {
             tps[0] = config.servers.find((server) => server.username === tps[0]).name;
         });
-        return interaction.followUp(tps_list.map((tps) => `- \`${tps[0]}\`: ${tps[1]}%`).join('\n'));
+        return interaction.followUp(tps_list.map((tps) => `- \`${tps[0]}\`: ${tps[1]}`).join('\n'));
     },
 };
