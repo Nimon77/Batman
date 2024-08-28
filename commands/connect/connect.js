@@ -220,7 +220,7 @@ function connectBot(server, interaction) {
         /» La connexion a été effectuée avec succès !/,
     );
     bot.addChatPattern(
-      'chat:tps',
+      'tps',
       /Le serveur a actuellement une latence de ([0-9.]+)%./,
     );
   });
