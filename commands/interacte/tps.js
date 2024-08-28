@@ -18,8 +18,6 @@ module.exports = {
         await wait(1500);
         tps_list.forEach((tps) => {
             tps[0] = config.servers.find((server) => server.username === tps[0]).name;
-        });
-        tps_list.forEach((tps) => {
             tps[1] = tps[1].replace(/([0-9.]+)%/g, '`$1%`');
         });
         tps_list.sort((a, b) => a[0].localeCompare(b[0]));
