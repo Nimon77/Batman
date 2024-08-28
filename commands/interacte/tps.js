@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Get the TPS of the Minecraft server.'),
     async execute(interaction) {
         await interaction.deferReply();
-        var tps = {};
+        var tps = [];
         bots.forEach((bot) => {
             bot.once('chat:tps', (tps) => {
                 tps.push([bot.username, tps]);
@@ -16,6 +16,7 @@ module.exports = {
             bot.chat('/tps');
         });
         await wait(5000);
+        tps.sort((a, b) => b[1] - a[1]);
         tps.forEach((tp) => {
             tp[0] = config.servers.find((server) => server.username === tp[0]).name;
         });
