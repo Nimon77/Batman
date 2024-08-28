@@ -29,7 +29,10 @@ module.exports = {
       bots[0].quit();
       await wait(1000);
     }
-    job.stop();
+    if (job !== null) {
+      job.stop();
+      job = null;
+    }
     return interaction.followUp('Disconnected from all servers');
   },
   async autocomplete(interaction) {
