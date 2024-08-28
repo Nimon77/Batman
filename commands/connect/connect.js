@@ -3,8 +3,8 @@ require('../../utils/instrument')
 const Sentry = require("@sentry/node");
 const {SlashCommandBuilder} = require('discord.js');
 const mineflayer = require('mineflayer');
-const wait = require('node:timers/promises').setTimeout;
 const {CronJob} = require('cron');
+const wait = require('node:timers/promises').setTimeout;
 
 function log(server, message) {
   console.log(`[${server.name}] ${message}`);
@@ -218,6 +218,10 @@ function connectBot(server, interaction) {
     bot.addChatPattern(
         'bot_connection_success',
         /» La connexion a été effectuée avec succès !/,
+    );
+    bot.addChatPattern(
+      'chat:tps',
+      /Le serveur a actuellement une latence de ([0-9.]+)%./,
     );
   });
 
