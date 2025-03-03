@@ -123,7 +123,7 @@ function connectBot(server, interaction) {
     host: server.host,
     port: server.port,
     username: server.username,
-    version: server.version || '1.18.2',
+    version: '1.18.2',
   });
 
   // bot.ready = false;
