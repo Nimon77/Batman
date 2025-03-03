@@ -101,6 +101,16 @@ function blacklistedMessage(message) {
   return false;
 }
 
+function handleMsg(bot, message) {
+  bienvenue = /^Bienvenue .* pour la premiere fois sur notre serveur ! souhaitez lui la bienvenue avec la commande \/b/;
+  if (bienvenue.test(message.toString())) {
+    // Add a random delay between 4 and 13 seconds
+    setTimeout(() => {
+      bot.chat('/b');
+    }, Math.floor(Math.random() * 9000) + 4000);
+  }
+}
+
 function connectBot(server, interaction) {
   const chatChannel = interaction.guild.channels.cache.find(
     (channel) => channel.id === server.discord_channel_id,
@@ -155,6 +165,7 @@ function connectBot(server, interaction) {
     if (blacklistedMessage(message.toString())) return;
     log(server, message.toAnsi());
     clearTimeout(msgTimer);
+    handleMsg(bot, message);
     msg += convertToAnsi3(message.toAnsi()) + '\n';
     // only send if no message in 5 seconds
     msgTimer = setTimeout(() => {
