@@ -266,7 +266,7 @@ module.exports = {
       bots.push(connectBot(server, interaction));
       return interaction.reply('Connecting to ' + server.name);
     }
-    await interaction.deferReply('Connecting to the server...');
+    await interaction.reply('Connecting to the server...');
     job = new CronJob(config.reconnect_cron, async function() {
       for (let i = 0; i < config.servers.length; i++) {
         if (bots.find((bot) => bot.username === config.servers[i].username))
