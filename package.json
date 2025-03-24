@@ -4,7 +4,7 @@
     "@sentry/profiling-node": "^9.3.0",
     "cron": "^4.1.0",
     "discord.js": "^14.18.0",
-    "mineflayer": "=4.25.0",
+    "mineflayer": "=4.27.0",
     "yaml": "^2.7.0"
   },
   "version": "1.2.2"
