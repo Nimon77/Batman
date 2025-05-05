@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@sentry/node": "^9.13.0",
+    "@sentry/node": "^9.15.0",
     "@sentry/profiling-node": "^9.14.0",
     "cron": "^4.3.0",
     "discord.js": "^14.18.0",
