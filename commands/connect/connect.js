@@ -113,7 +113,7 @@ function handleMsg(bot, message, serverName, notifChannel) {
   achat = /Boutique » (.*) Vient d'acheter (\d+)/
   if (achat.test(message.toString())) {
     v = achat.exec(message.toString())
-    notifChannel.send(`${serverName}\n${v[1]} vient d'acheter ${v[2]}`)
+    notifChannel.send(`${serverName} ${v[1]} ${v[2]}`)
   }
 }
 
