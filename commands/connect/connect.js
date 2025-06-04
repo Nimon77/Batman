@@ -101,7 +101,7 @@ function blacklistedMessage(message) {
   return false;
 }
 
-function handleMsg(bot, message) {
+function handleMsg(bot, message, serverName, notifChannel) {
   bienvenue = /^Bienvenue .* pour la premiere fois sur notre serveur ! souhaitez lui la bienvenue avec la commande \/b/;
   if (bienvenue.test(message.toString())) {
     // Add a random delay between 4 and 13 seconds
@@ -109,9 +109,18 @@ function handleMsg(bot, message) {
       bot.chat('/b');
     }, Math.floor(Math.random() * 9000) + 4000);
   }
+  
+  achat = /Boutique » (.*) Vient d'acheter (\d+)/
+  if (achat.test(message.toString())) {
+    v = achat.exec(message.toString())
+    notifChannel.send(`${serverName}\n${v[1]} vient d'acheter ${v[2]}`)
+  }
 }
 
 function connectBot(server, interaction) {
+  const notifChannel = interaction.guild.channel.cache.find(
+    (channel) => channel.id === config.discord.notif_channel_id,
+  );
   const chatChannel = interaction.guild.channels.cache.find(
     (channel) => channel.id === server.discord_channel_id,
   );
@@ -165,7 +174,7 @@ function connectBot(server, interaction) {
     if (blacklistedMessage(message.toString())) return;
     log(server, message.toAnsi());
     clearTimeout(msgTimer);
-    handleMsg(bot, message);
+    handleMsg(bot, message, server.name, notifChannel);
     msg += convertToAnsi3(message.toAnsi()) + '\n';
     // only send if no message in 5 seconds
     msgTimer = setTimeout(() => {
