@@ -109,7 +109,7 @@ function handleMsg(bot, message, serverName, notifChannel) {
       bot.chat('/b');
     }, Math.floor(Math.random() * 9000) + 4000);
   }
-  
+
   achat = /Boutique » (.*) Vient d'acheter (\d+)/
   if (achat.test(message.toString())) {
     v = achat.exec(message.toString())
@@ -118,7 +118,7 @@ function handleMsg(bot, message, serverName, notifChannel) {
 }
 
 function connectBot(server, interaction) {
-  const notifChannel = interaction.guild.channel.cache.find(
+  const notifChannel = interaction.guild.channels.cache.find(
     (channel) => channel.id === config.discord.notif_channel_id,
   );
   const chatChannel = interaction.guild.channels.cache.find(
