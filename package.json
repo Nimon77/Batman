@@ -2,7 +2,7 @@
   "dependencies": {
     "@sentry/node": "^9.29.0",
     "@sentry/profiling-node": "^9.27.0",
-    "cron": "^4.3.0",
+    "cron": "^4.3.1",
     "discord.js": "^14.19.3",
     "mineflayer": "=4.29.0",
     "yaml": "^2.8.0"
